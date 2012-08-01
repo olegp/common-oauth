@@ -1,4 +1,8 @@
 /*
+ * Portions Copyright 2012+ Oleg Podsechin
+ */
+
+/*
  * Portions Copyright 2009 Neville Burnell
  */
 
@@ -18,8 +22,8 @@
  * limitations under the License.
  */
 
-var assert = require("test/assert"),
-    OAuth = require("OAuth");
+var assert = require("assert"),
+    OAuth = require("../lib/oauth");
 
 var ENCODING // From http://wiki.oauth.net/TestCases
   = [ ["abcABC123", "abcABC123"]
@@ -38,35 +42,39 @@ exports.testEncode = function() {
         var expected = ENCODING[i][1];
         var actual = OAuth.percentEncode(input);
 
-        assert.eq(expected, actual);
+        assert.equal(expected, actual);
     };
 };
+
+function equalArray(a, b) {
+  assert.ok(!(a<b || b<a));
+}
 
 exports.testGetParameterList = function() {
     var list;
 
     list = OAuth.getParameterList(null);
-    assert.eq([], list);
+    equalArray([], list);
 
     list = OAuth.getParameterList('');
-    assert.eq([], list);
+    equalArray([], list);
 };
 
 exports.testGetParameterMap = function() {
     var map = OAuth.getParameterMap(null);
-    assert.isFalse(null === map);
-    assert.isFalse(map instanceof Array);
-    assert.isTrue(map instanceof Object);
+    assert.ok(null !== map);
+    assert.ok(!(map instanceof Array));
+    assert.ok(map instanceof Object);
 };
 
 exports.testGetParameter = function() {
     var actual;
 
     actual = OAuth.getParameter({x: 'a', y: 'b'}, 'x');
-    assert.eq('a', actual);
+    assert.equal('a', actual);
 
     actual = OAuth.getParameter([['x', 'a'], ['y', 'b'], ['x', 'c']], 'x');
-    assert.eq('a', actual);
+    assert.equal('a', actual);
 };
 
 exports.testGetAuthorizationHeader = function() {
@@ -74,27 +82,27 @@ exports.testGetAuthorizationHeader = function() {
     var expected = 'OAuth realm="R",oauth_token="T",oauth_w%40%21rd="%23%40%2A%21"';
 
     actual = OAuth.getAuthorizationHeader('R', [['a', 'b'], ['oauth_token', 'T'], ['oauth_w@!rd', '#@*!']]);
-    assert.isFalse(null === actual);
-    assert.eq(expected, actual);
+    assert.ok(null !== actual);
+    assert.equal(expected, actual);
 
     actual = OAuth.getAuthorizationHeader('R', {a: 'b', oauth_token: 'T', 'oauth_w@!rd': '#@*!'});
-    assert.isFalse(null === actual);
-    assert.eq(expected, actual);
+    assert.ok(null !== actual);
+    assert.equal(expected, actual);
 };
 
 exports.testCompleteRequest = function() {
     var message = {action: 'http://localhost', parameters: {}};
     OAuth.completeRequest(message, {consumerKey: 'CK', token: 'T'});
 
-    assert.eq('GET', message['method']);
+    assert.equal('GET', message['method']);
 
     var map = message.parameters;
 
-    assert.eq('CK', map['oauth_consumer_key']);
-    assert.eq('T', map['oauth_token']);
-    assert.eq('1.0', map['oauth_version']);
-    assert.isFalse(null === map['oauth_timestamp']);
-    assert.isFalse(null === map['oauth_nonce']);
+    assert.equal('CK', map['oauth_consumer_key']);
+    assert.equal('T', map['oauth_token']);
+    assert.equal('1.0', map['oauth_version']);
+    assert.ok(null !== map['oauth_timestamp']);
+    assert.ok(null !== map['oauth_nonce']);
 };
 
 
@@ -132,7 +140,7 @@ exports.testGetBaseString = function() {
         var expected = base[b++];
         var actual = OAuth.getBaseString({method: method, action: action, parameters: parameters});
 
-        assert.eq(expected, actual, label);
+        assert.equal(expected, actual, label);
     };
 };
 
@@ -160,11 +168,10 @@ exports.testGetSignature = function() {
                      {consumerSecret: consumerSecret, tokenSecret: tokenSecret});
         var actual = signer.getSignature(baseString);
 
-        assert.eq(expected, actual, label);
+        assert.equal(expected, actual, label);
     };
 };
 
 
-if (require.main === module.id)
-    require("test/runner").run(exports);
+require("test").run(exports);
 

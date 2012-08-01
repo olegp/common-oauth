@@ -1,7 +1,7 @@
 OAuth
 =====
 
-This is a port of the [Netflix OAuth Library][1] to Narwhal.
+This is a port of the [Netflix OAuth Library][1] to Common Node.
 
 Status
 ------
