@@ -1,8 +1,9 @@
 {
     "name": "oauth",
-    "dependencies": ["narwhal"],
-    "jars": [],
-    "author": "Neville Burnell",
+    "dependencies": [],
+    "main": "./lib/oauth.js",
+    "author": "Oleg Podsechin",
     "description": "OAuth Library",
-    "keywords": ["oauth"]
+    "keywords": ["oauth"],
+    "version": "0.0.1"
 }
