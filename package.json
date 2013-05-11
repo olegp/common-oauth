@@ -1,9 +1,9 @@
 {
-    "name": "oauth",
+    "name": "common-oauth",
     "dependencies": [],
     "main": "./lib/oauth.js",
     "author": "Oleg Podsechin",
     "description": "OAuth Library",
     "keywords": ["oauth"],
-    "version": "0.0.1"
+    "version": "0.1.0"
 }
